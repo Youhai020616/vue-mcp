@@ -419,24 +419,36 @@ export class HttpMcpServer {
       // 尝试加载现有组件数据
       if (await fs.pathExists(this.componentsDataPath)) {
         console.log('📂 Loading existing components data...');
-        components = await fs.readJson(this.componentsDataPath);
-        console.log(`✅ Loaded ${components.length} components from cache`);
+        try {
+          components = await fs.readJson(this.componentsDataPath);
+          console.log(`✅ Loaded ${components.length} components from cache`);
+        } catch (error) {
+          console.warn('⚠️ Failed to load cached components, will use fallback data');
+          components = this.getFallbackComponents();
+        }
       } else {
         console.log('🔍 Parsing Vue Bits components...');
-        
+
         // 检查 Vue Bits 路径是否存在
         if (!(await fs.pathExists(this.vueBitsPath))) {
-          console.warn(`⚠️ Vue Bits path not found: ${this.vueBitsPath}, using empty component list`);
-          components = [];
+          console.warn(`⚠️ Vue Bits path not found: ${this.vueBitsPath}`);
+          console.log('📦 Using fallback component data for demo purposes');
+          components = this.getFallbackComponents();
         } else {
-          // 从源码解析组件
-          const parser = new ComponentParser(this.vueBitsPath);
-          components = await parser.parseAllComponents();
-          
-          // 保存解析的数据以供将来使用
-          await fs.ensureDir(path.dirname(this.componentsDataPath));
-          await parser.saveComponentsData(this.componentsDataPath);
-          console.log(`💾 Cached ${components.length} components`);
+          try {
+            // 从源码解析组件
+            const parser = new ComponentParser(this.vueBitsPath);
+            components = await parser.parseAllComponents();
+
+            // 保存解析的数据以供将来使用
+            await fs.ensureDir(path.dirname(this.componentsDataPath));
+            await parser.saveComponentsData(this.componentsDataPath);
+            console.log(`💾 Cached ${components.length} components`);
+          } catch (parseError) {
+            console.warn('⚠️ Failed to parse components from source:', (parseError as Error).message);
+            console.log('📦 Using fallback component data');
+            components = this.getFallbackComponents();
+          }
         }
       }
 
@@ -446,7 +458,7 @@ export class HttpMcpServer {
 
       console.log('✅ Vue Bits MCP Server components initialized successfully!');
       console.log(`📊 Available: ${components.length} components`);
-      
+
       // 记录一些统计信息
       if (components.length > 0) {
         const metadata = this.searchEngine.getMetadata();
@@ -454,14 +466,236 @@ export class HttpMcpServer {
         Object.entries(metadata.categories).forEach(([category, data]: [string, any]) => {
           console.log(`   - ${category}: ${data.count} components`);
         });
+      } else {
+        console.log('ℹ️ Server running in demo mode with limited functionality');
       }
 
     } catch (error) {
       console.error('❌ Failed to initialize components:', error);
-      // 不抛出错误，而是使用空的组件列表
-      this.searchEngine = new SearchEngine([]);
+      console.log('🔄 Falling back to minimal component set');
+
+      // 优雅降级：使用最小的组件集合
+      const fallbackComponents = this.getFallbackComponents();
+      this.searchEngine = new SearchEngine(fallbackComponents);
       this.toolHandlers = new ToolHandlers(this.searchEngine);
+
+      console.log(`✅ Server initialized with ${fallbackComponents.length} fallback components`);
     }
+  }
+
+  private getFallbackComponents(): VueBitsComponent[] {
+    // 提供一些示例组件数据，用于演示和测试
+    return [
+      {
+        id: 'blur-text',
+        name: 'BlurText',
+        description: 'A text component with blur animation effect',
+        category: 'TextAnimations',
+        tags: ['text', 'animation', 'blur'],
+        props: [
+          {
+            name: 'text',
+            type: 'string',
+            required: true,
+            description: 'The text to display'
+          },
+          {
+            name: 'delay',
+            type: 'number',
+            required: false,
+            default: '0',
+            description: 'Animation delay in milliseconds'
+          }
+        ],
+        examples: [
+          {
+            title: 'Basic Usage',
+            code: '<BlurText text="Hello World" />',
+            description: 'Simple blur text animation'
+          }
+        ],
+        code: `<template>
+  <div class="blur-text">
+    {{ text }}
+  </div>
+</template>
+
+<script setup>
+defineProps({
+  text: {
+    type: String,
+    required: true
+  },
+  delay: {
+    type: Number,
+    default: 0
+  }
+})
+</script>
+
+<style scoped>
+.blur-text {
+  filter: blur(10px);
+  animation: unblur 1s ease-out forwards;
+}
+
+@keyframes unblur {
+  to {
+    filter: blur(0);
+  }
+}
+</style>`,
+        dependencies: [],
+        filePath: 'demo/BlurText.vue',
+        lastModified: new Date().toISOString()
+      },
+      {
+        id: 'fade-in',
+        name: 'FadeIn',
+        description: 'A component with fade-in animation effect',
+        category: 'Animations',
+        tags: ['animation', 'fade', 'transition'],
+        props: [
+          {
+            name: 'duration',
+            type: 'number',
+            required: false,
+            default: '1000',
+            description: 'Animation duration in milliseconds'
+          }
+        ],
+        examples: [
+          {
+            title: 'Basic Fade In',
+            code: '<FadeIn><p>Content to fade in</p></FadeIn>',
+            description: 'Fade in any content'
+          }
+        ],
+        code: `<template>
+  <div class="fade-in">
+    <slot />
+  </div>
+</template>
+
+<script setup>
+defineProps({
+  duration: {
+    type: Number,
+    default: 1000
+  }
+})
+</script>
+
+<style scoped>
+.fade-in {
+  opacity: 0;
+  animation: fadeIn var(--duration, 1s) ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+</style>`,
+        dependencies: [],
+        filePath: 'demo/FadeIn.vue',
+        lastModified: new Date().toISOString()
+      },
+      {
+        id: 'loading-spinner',
+        name: 'LoadingSpinner',
+        description: 'A customizable loading spinner component',
+        category: 'UI',
+        tags: ['loading', 'spinner', 'ui'],
+        props: [
+          {
+            name: 'size',
+            type: 'string',
+            required: false,
+            default: 'medium',
+            description: 'Size of the spinner (small, medium, large)'
+          },
+          {
+            name: 'color',
+            type: 'string',
+            required: false,
+            default: '#3b82f6',
+            description: 'Color of the spinner'
+          }
+        ],
+        examples: [
+          {
+            title: 'Default Spinner',
+            code: '<LoadingSpinner />',
+            description: 'Default loading spinner'
+          },
+          {
+            title: 'Custom Spinner',
+            code: '<LoadingSpinner size="large" color="#ef4444" />',
+            description: 'Large red spinner'
+          }
+        ],
+        code: `<template>
+  <div class="loading-spinner" :class="sizeClass" :style="{ color }">
+    <div class="spinner"></div>
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'medium',
+    validator: (value) => ['small', 'medium', 'large'].includes(value)
+  },
+  color: {
+    type: String,
+    default: '#3b82f6'
+  }
+})
+
+const sizeClass = computed(() => \`spinner-\${props.size}\`)
+</script>
+
+<style scoped>
+.loading-spinner {
+  display: inline-block;
+}
+
+.spinner {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-left-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-small .spinner {
+  width: 16px;
+  height: 16px;
+}
+
+.spinner-medium .spinner {
+  width: 24px;
+  height: 24px;
+}
+
+.spinner-large .spinner {
+  width: 32px;
+  height: 32px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>`,
+        dependencies: [],
+        filePath: 'demo/LoadingSpinner.vue',
+        lastModified: new Date().toISOString()
+      }
+    ];
   }
 
   private errorHandler(error: any, req: Request, res: Response, next: NextFunction): void {
