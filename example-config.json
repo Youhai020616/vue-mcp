@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "vue-bits": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "cwd": "/path/to/vue-bits-mcp",
+      "env": {
+        "VUE_BITS_PATH": "/path/to/vue-bits"
+      }
+    }
+  }
+}

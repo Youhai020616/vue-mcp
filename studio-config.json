@@ -1,0 +1,166 @@
+{
+  "name": "vue-bits-mcp",
+  "displayName": "Vue Bits Components",
+  "description": "Intelligent access to 40+ animated Vue components with search, code generation, and installation guides",
+  "version": "1.0.0",
+  "category": "development",
+  "tags": [
+    "vue",
+    "animation",
+    "components",
+    "ui",
+    "gsap",
+    "three.js",
+    "design",
+    "frontend"
+  ],
+  "author": {
+    "name": "Vue Bits MCP",
+    "email": "contact@vue-bits-mcp.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vue-bits-mcp/vue-bits-mcp"
+  },
+  "homepage": "https://vue-bits.dev",
+  "documentation": "https://github.com/vue-bits-mcp/vue-bits-mcp#readme",
+  "license": "MIT",
+  "requirements": {
+    "node": ">=18.0.0"
+  },
+  "installation": {
+    "npm": "npm install vue-bits-mcp",
+    "yarn": "yarn add vue-bits-mcp",
+    "pnpm": "pnpm add vue-bits-mcp"
+  },
+  "configuration": {
+    "required": false,
+    "environment": {
+      "VUE_BITS_PATH": {
+        "description": "Path to Vue Bits project directory",
+        "default": "../",
+        "required": false
+      }
+    }
+  },
+  "capabilities": [
+    "Component search and discovery",
+    "Complete source code access",
+    "Props documentation",
+    "Dependency analysis",
+    "Installation guides",
+    "Component recommendations",
+    "Library statistics"
+  ],
+  "tools": [
+    {
+      "name": "search_vue_components",
+      "description": "Search for Vue animation components by name, category, or functionality"
+    },
+    {
+      "name": "get_component_code",
+      "description": "Get complete Vue component source code and implementation details"
+    },
+    {
+      "name": "get_component_props",
+      "description": "Get detailed component properties and configuration options"
+    },
+    {
+      "name": "list_categories",
+      "description": "List all component categories and subcategories with statistics"
+    },
+    {
+      "name": "get_installation_guide",
+      "description": "Get installation and setup instructions for components"
+    },
+    {
+      "name": "analyze_dependencies",
+      "description": "Analyze dependencies and generate installation commands"
+    },
+    {
+      "name": "get_similar_components",
+      "description": "Find components similar to a given component"
+    },
+    {
+      "name": "get_popular_components",
+      "description": "Get the most popular and commonly used components"
+    },
+    {
+      "name": "get_recommendations",
+      "description": "Get personalized component recommendations"
+    },
+    {
+      "name": "get_component_metadata",
+      "description": "Get comprehensive library metadata and statistics"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Search for text animation components",
+      "description": "Find components for animating text with various effects",
+      "tool": "search_vue_components",
+      "arguments": {
+        "query": "text animation",
+        "category": "TextAnimations",
+        "limit": 5
+      }
+    },
+    {
+      "title": "Get component source code",
+      "description": "Retrieve the complete implementation of a specific component",
+      "tool": "get_component_code",
+      "arguments": {
+        "componentId": "textanimations-split-text",
+        "includeProps": true,
+        "includeExamples": true
+      }
+    },
+    {
+      "title": "Get installation guide",
+      "description": "Get step-by-step installation instructions for a component",
+      "tool": "get_installation_guide",
+      "arguments": {
+        "componentId": "animations-splash-cursor",
+        "projectType": "nuxt3"
+      }
+    },
+    {
+      "title": "Analyze dependencies",
+      "description": "Analyze dependencies for multiple components",
+      "tool": "analyze_dependencies",
+      "arguments": {
+        "componentIds": [
+          "textanimations-split-text",
+          "backgrounds-aurora"
+        ],
+        "packageManager": "pnpm"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "url": "https://vue-bits.dev/images/screenshot-1.png",
+      "caption": "Component search and discovery interface"
+    },
+    {
+      "url": "https://vue-bits.dev/images/screenshot-2.png",
+      "caption": "Complete source code with documentation"
+    }
+  ],
+  "keywords": [
+    "vue",
+    "vue3",
+    "animation",
+    "components",
+    "ui",
+    "gsap",
+    "three.js",
+    "mcp",
+    "ai",
+    "development",
+    "frontend",
+    "design",
+    "motion",
+    "interactive"
+  ]
+}
