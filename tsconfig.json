@@ -15,7 +15,11 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "allowImportingTsExtensions": false,
-    "noEmit": false
+    "noEmit": false,
+    "types": ["node"],
+    "lib": ["ES2022"],
+    "noImplicitAny": false,
+    "strictNullChecks": true
   },
   "include": [
     "src/**/*"

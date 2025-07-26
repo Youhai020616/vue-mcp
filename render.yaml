@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: vue-bits-mcp-server
+    env: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VUE_BITS_PATH
+        value: ./
+      - key: ALLOWED_ORIGINS
+        value: https://claude.ai,https://app.anthropic.com
+    # 可选：自定义域名
+    # domains:
+    #   - vue-bits-mcp.yourdomain.com
+    
+    # 可选：环境变量从文件加载
+    # envVarsFromFile: .env.production
+
+# 可选：添加数据库或其他服务
+# databases:
+#   - name: vue-bits-db
+#     databaseName: vue_bits
+#     user: vue_bits_user
+
+# 可选：添加静态文件服务
+# staticSites:
+#   - type: static
+#     name: vue-bits-docs
+#     buildCommand: npm run build:docs
+#     publishPath: ./docs/dist
