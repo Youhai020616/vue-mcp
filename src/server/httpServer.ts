@@ -491,6 +491,7 @@ export class HttpMcpServer {
         name: 'BlurText',
         description: 'A text component with blur animation effect',
         category: 'TextAnimations',
+        subcategory: 'Text Effects',
         tags: ['text', 'animation', 'blur'],
         props: [
           {
@@ -547,6 +548,8 @@ defineProps({
 </style>`,
         dependencies: [],
         filePath: 'demo/BlurText.vue',
+        complexity: 'simple',
+        performance: 'high',
         lastModified: new Date().toISOString()
       },
       {
@@ -554,6 +557,7 @@ defineProps({
         name: 'FadeIn',
         description: 'A component with fade-in animation effect',
         category: 'Animations',
+        subcategory: 'Transitions',
         tags: ['animation', 'fade', 'transition'],
         props: [
           {
@@ -600,13 +604,16 @@ defineProps({
 </style>`,
         dependencies: [],
         filePath: 'demo/FadeIn.vue',
+        complexity: 'simple',
+        performance: 'high',
         lastModified: new Date().toISOString()
       },
       {
         id: 'loading-spinner',
         name: 'LoadingSpinner',
         description: 'A customizable loading spinner component',
-        category: 'UI',
+        category: 'Components',
+        subcategory: 'UI Elements',
         tags: ['loading', 'spinner', 'ui'],
         props: [
           {
@@ -693,6 +700,8 @@ const sizeClass = computed(() => \`spinner-\${props.size}\`)
 </style>`,
         dependencies: [],
         filePath: 'demo/LoadingSpinner.vue',
+        complexity: 'simple',
+        performance: 'high',
         lastModified: new Date().toISOString()
       }
     ];
