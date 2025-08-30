@@ -12,6 +12,7 @@ export interface VueBitsComponent {
   examples: ComponentExample[];
   complexity: 'simple' | 'medium' | 'complex';
   performance: 'high' | 'medium' | 'low';
+  lastModified?: string;
 }
 
 export interface ComponentProp {
